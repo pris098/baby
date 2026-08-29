@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1,
+      maximum-scale=1,
+      user-scalable=no,
+      viewport-fit=cover">
+
+<title>Vora's Baby</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Segoe UI",
+    sans-serif;
+
+  background: #fffaf5;
+  color: #302b31;
+}
+
+body {
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+button {
+  font: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+.app {
+  width: 100%;
+  max-width: 560px;
+  min-height: 100svh;
+
+  padding:
+    max(22px, env(safe-area-inset-top))
+    20px
+    max(26px, env(safe-area-inset-bottom));
+
+  position: relative;
+  z-index: 2;
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .55;
+}
+
+.b1 {
+  width: 270px;
+  height: 270px;
+  background: #ffe7d5;
+  top: -130px;
+  left: -130px;
+}
+
+.b2 {
+  width: 330px;
+  height: 330px;
+  background: #dcefeb;
+  right: -160px;
+  bottom: -150px;
+}
+
+.screen {
+  display: none;
+  position: relative;
+  min-height: calc(100svh - 48px);
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.screen.active {
+  display: flex;
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+.title {
+  font-size: clamp(45px, 13vw, 68px);
+  line-height: .9;
+  letter-spacing: -3px;
+  margin: 0 0 15px;
+  font-weight: 950;
+}
+
+.subtitle {
+  font-size: 17px;
+  color: #746d72;
+  line-height: 1.5;
+  max-width: 420px;
+}
+
+.primary {
+  width: 100%;
+  max-width: 400px;
+
+  padding: 18px 24px;
+
+  border-radius: 999px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #78a9a1,
+      #5d8f87
+    );
+
+  font-size: 18px;
+  font-weight: 900;
+
+  box-shadow:
+    0 12px 30px
+    rgba(93,143,135,.25);
+
+  margin-top: 8px;
+}
+
+.primary:active {
+  transform: scale(.97);
+}
+
+
+/* =========================================
+   BABY
+========================================= */
+
+.baby {
+  width: 205px;
+  height: 205px;
+
+  border-radius: 50%;
+
+  margin: 20px 0 25px;
+
+  background:
+    radial-gradient(
+      circle at 30% 22%,
+      rgba(255,255,255,.95) 0 5%,
+      transparent 6%
+    ),
+    linear-gradient(
+      145deg,
+      #fffdf7,
+      #f4dfc9
+    );
+
+  box-shadow:
+    0 25px 55px
+    rgba(100,80,65,.15),
+
+    inset 0 -15px 25px
+    rgba(210,165,120,.12);
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform .5s ease,
+    box-shadow .5s ease;
+}
+
+.face {
+  width: 135px;
+  height: 135px;
+
+  border-radius: 50%;
+
+  position: relative;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffdcae,
+      #f4c48e
+    );
+
+  box-shadow:
+    inset 0 -7px 12px
+    rgba(170,100,55,.12);
+}
+
+
+/* HAIR */
+
+.hair {
+  position: absolute;
+
+  width: 85px;
+  height: 45px;
+
+  left: 25px;
+  top: -5px;
+
+  background: #6c4d3a;
+
+  border-radius:
+    50% 50% 30% 30%;
+
+  transform: rotate(-4deg);
+}
+
+
+/* EARS */
+
+.ear {
+  position: absolute;
+
+  width: 18px;
+  height: 28px;
+
+  top: 55px;
+
+  background: #f2bd87;
+
+  border-radius: 50%;
+}
+
+.ear.left {
+  left: -10px;
+}
+
+.ear.right {
+  right: -10px;
+}
+
+
+/* EYES */
+
+.eye {
+  position: absolute;
+
+  width: 13px;
+  height: 17px;
+
+  top: 52px;
+
+  background: #49352f;
+
+  border-radius: 50%;
+
+  transition:
+    height .5s ease;
+}
+
+.eye.left {
+  left: 35px;
+}
+
+.eye.right {
+  right: 35px;
+}
+
+
+/* BROWS */
+
+.brow {
+  position: absolute;
+
+  width: 24px;
+  height: 7px;
+
+  top: 40px;
+
+  border-top:
+    4px solid #7a4f3c;
+
+  border-radius: 50%;
+
+  transition:
+    transform .5s ease;
+}
+
+.brow.left {
+  left: 29px;
+  transform: rotate(18deg);
+}
+
+.brow.right {
+  right: 29px;
+  transform: rotate(-18deg);
+}
+
+
+/* NOSE */
+
+.nose {
+  position: absolute;
+
+  width: 12px;
+  height: 10px;
+
+  left: 61px;
+  top: 70px;
+
+  border-bottom:
+    3px solid #d79461;
+
+  border-radius: 50%;
+}
+
+
+/* MOUTH */
+
+.mouth {
+  position: absolute;
+
+  width: 38px;
+  height: 32px;
+
+  left: 48px;
+  top: 81px;
+
+  background: #9b4f54;
+
+  border-radius: 50%;
+
+  transition:
+    all .5s ease;
+}
+
+.tongue {
+  position: absolute;
+
+  width: 18px;
+  height: 9px;
+
+  left: 10px;
+  bottom: 3px;
+
+  background: #f0838b;
+
+  border-radius: 50%;
+}
+
+
+/* TEARS */
+
+.tear {
+  position: absolute;
+
+  width: 8px;
+  height: 17px;
+
+  background: #75bde8;
+
+  border-radius: 50%;
+
+  top: 67px;
+
+  opacity: 1;
+
+  transition:
+    opacity .5s ease;
+}
+
+.tear.left {
+  left: 37px;
+}
+
+.tear.right {
+  right: 37px;
+}
+
+
+/* =========================================
+   CRYING
+========================================= */
+
+.baby.crying {
+  animation:
+    cryShake .3s infinite alternate;
+}
+
+@keyframes cryShake {
+
+  from {
+    transform:
+      rotate(-2deg)
+      translateX(-2px);
+  }
+
+  to {
+    transform:
+      rotate(2deg)
+      translateX(2px);
+  }
+
+}
+
+
+/* =========================================
+   MOODS
+========================================= */
+
+.baby[data-mood="sad"] .mouth {
+
+  width: 28px;
+  height: 16px;
+
+  left: 54px;
+  top: 91px;
+
+  border-radius:
+    50% 50% 0 0;
+
+  background: transparent;
+
+  border-top:
+    5px solid #9b4f54;
+}
+
+.baby[data-mood="calming"] .mouth {
+
+  width: 28px;
+  height: 14px;
+
+  left: 54px;
+  top: 88px;
+
+  border-radius:
+    0 0 50% 50%;
+
+  background: transparent;
+
+  border-bottom:
+    5px solid #9b4f54;
+}
+
+.baby[data-mood="happy"] .mouth {
+
+  width: 38px;
+  height: 20px;
+
+  left: 48px;
+  top: 86px;
+
+  border-radius:
+    0 0 50% 50%;
+
+  background: #9b4f54;
+}
+
+.baby[data-mood="veryhappy"] .mouth {
+
+  width: 42px;
+  height: 23px;
+
+  left: 46px;
+  top: 83px;
+
+  border-radius:
+    0 0 50% 50%;
+
+  background: #9b4f54;
+}
+
+.baby[data-mood="sad"] .tear.right,
+.baby[data-mood="calming"] .tear.right,
+.baby[data-mood="happy"] .tear,
+.baby[data-mood="veryhappy"] .tear {
+  opacity: 0;
+}
+
+.baby[data-mood="happy"] .eye,
+.baby[data-mood="veryhappy"] .eye {
+
+  height: 10px;
+
+  border-radius:
+    50% 50% 0 0;
+}
+
+.baby[data-mood="happy"] .brow,
+.baby[data-mood="veryhappy"] .brow {
+  transform: rotate(0deg);
+}
+
+
+/* =========================================
+   HAPPY ANIMATION
+========================================= */
